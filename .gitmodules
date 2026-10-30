@@ -1,0 +1,9 @@
+[submodule "sdks"]
+	path = sdks
+	url = https://github.com/martinpaljak/oracle_javacard_sdks
+[submodule "fido2applet"]
+	path = fido2applet
+	url = https://github.com/BryanJacobs/FIDO2Applet.git
+[submodule "emv-card-simulator"]
+	path = emv-card-simulator
+	url = https://github.com/mrautio/emv-card-simulator.git
