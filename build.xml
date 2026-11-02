@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="javacard-demos" default="signer" basedir=".">
+    <taskdef name="javacard" classname="pro.javacard.ant.JavaCard"
+        classpath="ant-javacard.jar"/>
+
+    <target name="init">
+        <mkdir dir="build"/>
+    </target>
+
+    <target name="signer" depends="init">
+        <javacard>
+            <cap jckit="sdks/jc320v26.0_kit" targetsdk="3.0.5"
+                aid="F0DEC0DE01" package="signer" version="1.0"
+                output="build/signer.cap" sources="src">
+                    <applet class="signer.EccSignerApplet" aid="F0DEC0DE0101"/>
+                </cap>
+        </javacard>
+    </target>
+
+    <!-- mrautio/emv-card-simulator (submodule). Upstream's Gradle build pins
+    Java 1.7 class files, which current JDKs cannot emit, and loads the same
+    package three times (one CAP per applet, because the converter wants
+    every applet AID under the package RID): ~66 KB, more than a J3R180
+    with FIDO2Applet has free. Here one CAP declares all three classes under
+    RID AFFFFFFFFF and loads the code once (~22 KB); the PSE and PPSE
+    instances get their standard AIDs at install time (see README.md). The
+    sources already share statics across the package's applets ("only one
+    of them is selected at a time"). -->
+    <target name="emv-sim" depends="init">
+        <javacard jckit="sdks/jc320v26.0_kit">
+            <cap targetsdk="3.0.5" package="emvcardsimulator" version="0.1"
+                aid="AFFFFFFFFF0000" output="build/emvsim.cap"
+                sources="emv-card-simulator/src/main/java">
+                    <applet class="emvcardsimulator.PaymentApplication" aid="AFFFFFFFFF1234"/>
+                    <applet class="emvcardsimulator.ProximityPaymentSystemEnvironment" aid="AFFFFFFFFF0002"/>
+                    <applet class="emvcardsimulator.PaymentSystemEnvironment" aid="AFFFFFFFFF0001"/>
+                </cap>
+        </javacard>
+    </target>
+
+    <!-- FIDO2Applet's own Gradle build pins the 3.0.5u4 converter, whose javac
+    defaults (source/target 6) no JDK past 8 accepts. Building it here with
+    the 26.0 converter and targetsdk 3.0.5 produces the same CAP without a
+    museum JDK. -->
+    <target name="fido2" depends="init">
+        <javacard>
+            <cap jckit="sdks/jc320v26.0_kit" targetsdk="3.0.5"
+                aid="A000000647" package="us.q3q.fido2" version="0.4"
+                output="build/fido2.cap" sources="fido2applet/src/main/java">
+                    <applet class="us.q3q.fido2.FIDO2Applet" aid="A0000006472F0001"/>
+                </cap>
+        </javacard>
+    </target>
+
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+</project>

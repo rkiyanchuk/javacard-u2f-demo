@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Read directly by Eclipse JDT LS (Zed, VS Code, nvim, Eclipse). The Ant build
+     in build.xml remains the source of truth for producing the CAP; this file
+     only tells the language server where sources and the JavaCard API live.
+     api_classic-3.0.5.jar is the same jar ant-javacard compiles against for
+     targetsdk=3.0.5, so editor and build agree on the API surface. -->
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="sdks/jc320v26.0_kit/lib/api_classic-3.0.5.jar"/>
+	<classpathentry kind="output" path="build/jdt"/>
+</classpath>

@@ -1,0 +1,12 @@
+# Artifacts
+*.cap
+ant-javacard.jar
+build/
+card_pub.pem*
+/cardtool
+*.png
+
+# Python
+.venv/
+__pycache__/
+.ruff_cache/

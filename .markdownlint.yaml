@@ -1,0 +1,4 @@
+# Wrap prose at 120 columns; tables and code blocks are exempt.
+MD013:
+  tables: false
+  code_blocks: false
